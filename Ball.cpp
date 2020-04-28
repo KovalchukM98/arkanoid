@@ -4,8 +4,8 @@
 class Ball{
 public:
 	Ball(){
-		X_dir = -5;
-		Y_dir = -5;
+		X_dir = -3;
+		Y_dir = -3;
 		X = 300;
 		Y = 720;
 		circle.setRadius(10.f);

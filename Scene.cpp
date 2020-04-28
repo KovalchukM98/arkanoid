@@ -21,9 +21,10 @@ public:
 
 	void start(){
         is_game_over = false;
+        board_touch = false;
 		window.create(sf::VideoMode(600, 800), "Arkanoid");
 		window.setVerticalSyncEnabled(true);
-		window.setFramerateLimit(60);
+		window.setFramerateLimit(80);
         board = new Board();
         ball = new Ball();
         generate_field();
@@ -34,24 +35,30 @@ public:
         //     return;
         // }
         // music.play();
-		while (window.isOpen() && !is_game_over)
+        
+        float time;
+        float delay = 0.5;
+		while (!is_game_over)
     	{
             check_event();
+            time = clock.getElapsedTime().asSeconds();
+            timer += time;
+            if(timer >= delay){
+                board_touch = false;
+            }
             check_ball();
 
             window.clear();
             draw();
             window.display();
     	}
-        sf::Clock clock;
-        float time;
-        float timer;
-        float delay = 1.0;
-        while(timer > delay){
-            time = clock.getElapsedTime().asSeconds();
-            timer += time;
-            clock.restart();
-        }
+        
+        // while(timer > delay){
+        //     time = clock.getElapsedTime().asSeconds();
+        //     timer += time;
+        //     clock.restart();
+        // }
+        window.close();
         delete board;
         delete ball;
 	};
@@ -81,14 +88,18 @@ private:
     }
 
     void check_ball(){
-        if( ball->get_Y() > 780){
+        if( ball->get_Y() > 780 && !board_touch){
             int b_pos = board->get_X();
             if( ball->get_X() >= b_pos && ball->get_X() <= b_pos+100){
                 ball->Y_touch();
+                board_touch = true;
+                clock.restart();
+                timer = 0;
             }
         }
         if(ball->lost()){
             is_game_over = true;
+            board_touch = false;
         }
         search_collisions(ball->get_X(), ball->get_Y());
         ball->update();
@@ -100,18 +111,22 @@ private:
         if(field[(X+10)/60][Y/40] == true){
             field[(X+10)/60][Y/40] = false;
             ball->X_touch();
+            return;
         }
         if(field[(X-10)/60][Y/40] == true){
             field[(X-10)/60][Y/40] = false;
             ball->X_touch();
+            return;
         }
         if(field[X/60][(Y+10)/40] == true){
             field[X/60][(Y+10)/40] = false;
             ball->Y_touch();
+            return;
         }
         if(field[X/60][(Y-10)/40] == true){
             field[X/60][(Y-10)/40] = false;
             ball->Y_touch();
+            return;
         }
     }
 
@@ -166,4 +181,7 @@ private:
     Ball *ball;
     bool field[600/60][600/40];
     bool is_game_over;
+    bool board_touch;
+    sf::Clock clock;
+    float timer;
 };

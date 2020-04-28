@@ -13,10 +13,10 @@ public:
 
 	void update(int flag){
 		if(flag == 0 && X > 0){
-			X -= 15;
+			X -= 10;
 			rectangle.move(-15,0);
 		} else if( X < 500){
-			X += 15;
+			X += 10;
 			rectangle.move(15,0);
 		}
 	}
