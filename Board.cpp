@@ -21,6 +21,10 @@ public:
 		}
 	}
 
+	int get_X(){
+		return X;
+	}
+
 	sf::RectangleShape rectangle;
 	int X;
 };

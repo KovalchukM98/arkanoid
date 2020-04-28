@@ -27,14 +27,20 @@ public:
 
         sf::Clock clock;
         float time;
+        float timer;
+        float delay = 0.3;
 		while (window.isOpen() && !is_game_over)
     	{
-    	    check_event();
-            ball->update();
+            check_event();
+            check_ball();
+            time = clock.getElapsedTime().asMilliseconds();
+            timer += time;
+            clock.restart();
+            if(timer > delay){
+                timer = 0;
+            }
 
             window.clear();
-            time = clock.getElapsedTime().asMilliseconds();
-            clock.restart();
 
             draw();
             window.display();
@@ -47,6 +53,19 @@ private:
     void draw(){
         window.draw(board->rectangle);
         window.draw(ball->circle);
+    }
+
+    void check_ball(){
+        if( ball->get_Y() > 780){
+            int b_pos = board->get_X();
+            if( ball->get_X() >= b_pos && ball->get_X() <= b_pos+100){
+                ball->board_touch();
+            }
+        }
+        if(ball->lost()){
+            is_game_over = true;
+        }
+        ball->update();
     }
 
     void check_event(){
@@ -89,5 +108,6 @@ private:
 	sf::RenderWindow window;
     Board *board;
     Ball *ball;
+    // Blocks blocks;
     bool is_game_over;
 };
