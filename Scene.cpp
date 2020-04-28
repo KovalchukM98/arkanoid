@@ -97,6 +97,9 @@ private:
             board_touch = false;
         }
         search_collisions(ball->get_X(), ball->get_Y());
+        if(bricks_num == 0){
+            is_game_over = true;
+        }
         ball->update();
     }
 
@@ -104,21 +107,25 @@ private:
         if(Y >= 590)
             return;
         if(field[(X+10)/60][Y/40] == true){
+            bricks_num--;
             field[(X+10)/60][Y/40] = false;
             ball->X_touch();
             return;
         }
         if(field[(X-10)/60][Y/40] == true){
+            bricks_num--;
             field[(X-10)/60][Y/40] = false;
             ball->X_touch();
             return;
         }
         if(field[X/60][(Y+10)/40] == true){
+            bricks_num--;
             field[X/60][(Y+10)/40] = false;
             ball->Y_touch();
             return;
         }
         if(field[X/60][(Y-10)/40] == true){
+            bricks_num--;
             field[X/60][(Y-10)/40] = false;
             ball->Y_touch();
             return;
@@ -162,10 +169,13 @@ private:
     }
 
     void generate_field(){
+        bricks_num = 0;
         for(int i = 0 ; i < 600/60 ; i++){
             for(int j = 0 ; j < 600/40 ; j++)
-                if(rand() % 2 == 1)
+                if(rand() % 2 == 1){
+                    bricks_num++;
                     field[i][j] = true;
+                }
                 else
                     field[i][j] = false;
         }
@@ -175,6 +185,7 @@ private:
     Board *board;
     Ball *ball;
     bool field[600/60][600/40];
+    int bricks_num;
     bool is_game_over;
     bool board_touch;
     sf::Clock clock;
