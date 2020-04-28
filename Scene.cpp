@@ -6,8 +6,8 @@
 #include <mutex>
 #include <sstream>
 #include <string>
-
-std::mutex mutex;
+#include "Board.cpp"
+#include "Ball.cpp"
 
 class Scene{
 public:
@@ -22,18 +22,37 @@ public:
 		window.create(sf::VideoMode(600, 800), "Arkanoid");
 		window.setVerticalSyncEnabled(true);
 		window.setFramerateLimit(60);
+        board = new Board();
+        ball = new Ball();
 
+        sf::Clock clock;
+        float time;
 		while (window.isOpen() && !is_game_over)
     	{
     	    check_event();
+            ball->update();
+
+            window.clear();
+            time = clock.getElapsedTime().asMilliseconds();
+            clock.restart();
+
+            draw();
+            window.display();
     	}
+        delete board;
 	};
+
+private:
+
+    void draw(){
+        window.draw(board->rectangle);
+        window.draw(ball->circle);
+    }
 
     void check_event(){
         sf::Event event;
         while (window.pollEvent(event))
         {
-            // пользователь попытался закрыть окно: мы закрываем окно
             switch (event.type){
                 case sf::Event::Closed:
                 window.close();
@@ -42,22 +61,33 @@ public:
 
                 case sf::Event::KeyPressed:
                 check_key(event);
+                break;
             }
-            // window.clear();
-            window.display();
         }
     }
-
-private:
 
     void check_key(sf::Event event){
         switch(event.key.code){
             case sf::Keyboard::Escape:
             window.close();
             is_game_over = true;
+            break;
+
+            case sf::Keyboard::Left:
+            board->update(0);
+            break;
+
+            case sf::Keyboard::Right:
+            board->update(1);
+            break;
+
+            default:
+            break;
         }
     }
 
-	sf::Window window;
+	sf::RenderWindow window;
+    Board *board;
+    Ball *ball;
     bool is_game_over;
 };
