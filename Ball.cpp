@@ -22,7 +22,7 @@ public:
 		if(X + X_dir < 10){
 			X_dir *= -1;
 		}
-		if(Y + Y_dir > 800){
+		if(Y + Y_dir > 820){
 			is_losed = true;
 		}
 		if(Y + Y_dir < 10){

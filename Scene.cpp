@@ -52,12 +52,7 @@ public:
             draw();
             window.display();
     	}
-        
-        // while(timer > delay){
-        //     time = clock.getElapsedTime().asSeconds();
-        //     timer += time;
-        //     clock.restart();
-        // }
+
         window.close();
         delete board;
         delete ball;
