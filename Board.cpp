@@ -13,11 +13,11 @@ public:
 
 	void update(int flag){
 		if(flag == 0 && X > 0){
-			X -= 7;
-			rectangle.move(-7,0);
+			X -= 10;
+			rectangle.move(-10,0);
 		} else if( X < 500){
-			X += 7;
-			rectangle.move(7,0);
+			X += 10;
+			rectangle.move(10,0);
 		}
 	}
 
@@ -25,6 +25,11 @@ public:
 		return X;
 	}
 
+	sf::RectangleShape get_rectangle(){
+		return rectangle;
+	}
+
+private:
 	sf::RectangleShape rectangle;
 	int X;
 };

@@ -45,10 +45,19 @@ public:
 		return Y;
 	}
 
-	void board_touch(){
+	void Y_touch(){
 		Y_dir *= -1;
 	}
 
+	void X_touch(){
+		X_dir *= -1;
+	}
+
+	sf::CircleShape get_circle(){
+		return circle;
+	}
+	
+private:
 	sf::CircleShape circle;
 	int X;
 	int Y;
